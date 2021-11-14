@@ -10,6 +10,146 @@
  * downloaded from http://pixabay.com/
  * 
  */
+ 
+function closeMACtable()
+{
+    uimanager.getWindow("divmacshow").dispose();
+    removeBodyDiv('divbk');
+}
+
+function closeARPtable()
+{
+    uimanager.getWindow("divarpshow").dispose();
+    removeBodyDiv('divbk');
+}
+
+
+
+function showMACtable(id)
+{
+    createBkDiv(id);
+    createMACtable(id);
+}
+
+function showswitchMACtable(id)
+{
+    createBkDiv(id);
+    createswitchMACtable(id);
+}
+
+function showARPTable(id)
+{
+    createBkDiv(id);
+    createARPtable(id);
+}
+
+function createARPtable(id) {
+    var host = network.getElement(id);
+    /*var div = document.createElement("div");
+    var l = window.innerWidth / 2 - 200;
+    var t = window.innerHeight / 2 - 200;*/
+
+    var headers = [_("IP"), _("MACaddress")];
+    var arpTable=host.getConnectable().getARPtable();
+
+    var innerHTML='<table style="font-size:0.8em;">';
+    for (var ip in arpTable) {
+        var mac=arpTable[ip];
+        innerHTML+='<tr><th>'+ip.toString()+'</th><th>'+mac.toString()+'</th></tr>';
+        //data.push(datatmp);
+    }
+    innerHTML+="</table>"
+    //var uimactable = new UITable(headers, data, 'mactable');
+
+    /*div.setAttribute('style', 'position:absolute;top:' + t + 'px;left:' + l + 'px;z-index:110;background-color:white;width:700px;height:400px;border-radius:10px;border:1px solid;padding:10px;text-align:center;');
+    div.setAttribute('id', 'divgwconfig');
+    div.innerHTML = host.getConnectable().getGatewayManager().getController();*/
+
+    //var controls = '<input type="button" id="upload" value="' + _("Save") + '" onclick="saveGWConfig(' + id + ',\'' + uigwtable.getId() + '\');" />\
+    //<input type="button" id="cancel" value="' + _("Cancel") + '" onclick="cancelGWConfig(\'' + uigwtable.getId() + '\');" />';
+    var controls = '<p><input type="button" id="cancel" value="'+_("Exit")+'" onclick="closeARPtable();" /></p>';
+
+
+    var w = new UIWindow('divarpshow', _('ARP table show'), 400, 400, false, 1.0);
+    w.setContent(innerHTML);
+    w.setControls(controls);
+    w.render();
+}
+
+
+
+function createMACtable(id) {
+    var host = network.getElement(id);
+    /*var div = document.createElement("div");
+    var l = window.innerWidth / 2 - 200;
+    var t = window.innerHeight / 2 - 200;*/
+
+    var headers = [_("port"), _("MACaddress")];
+    var connectorNums=host.getConnectable().getConnectorNumber();
+    var datatmp=[];
+    //var data=[];
+    var innerHTML='<table style="font-size:0.8em;">';
+    for (var i = 0; i < host.getConnectable().getConnectorNumber(); i++) {
+        var connector = host.getConnectable().getConnector(i);
+        var pos = host.getConnectable().getConnectorPos(connector);
+        datatmp[0] =[pos.toString()];
+        mactmp=host.getConnectable().getMAC(pos);
+        if (mactmp!= null) {
+            datatmp[1] = [host.getConnectable().getMAC(pos).toString()];
+        }
+        else { datatmp[1] = null; }
+        innerHTML+='<tr><th>'+'Interface'+datatmp[0]+'</th><th>'+datatmp[1]+'</th></tr>';
+        //data.push(datatmp);
+    }
+    innerHTML+="</table>"
+    //var uimactable = new UITable(headers, data, 'mactable');
+
+    /*div.setAttribute('style', 'position:absolute;top:' + t + 'px;left:' + l + 'px;z-index:110;background-color:white;width:700px;height:400px;border-radius:10px;border:1px solid;padding:10px;text-align:center;');
+    div.setAttribute('id', 'divgwconfig');
+    div.innerHTML = host.getConnectable().getGatewayManager().getController();*/
+
+    //var controls = '<input type="button" id="upload" value="' + _("Save") + '" onclick="saveGWConfig(' + id + ',\'' + uigwtable.getId() + '\');" />\
+  //<input type="button" id="cancel" value="' + _("Cancel") + '" onclick="cancelGWConfig(\'' + uigwtable.getId() + '\');" />';
+    var controls = '<p><input type="button" id="cancel" value="'+_("Exit")+'" onclick="closeMACtable();" /></p>';
+
+
+    var w = new UIWindow('divmacshow', _('MAC table show'), 400, 400, false, 1.0);
+    w.setContent(innerHTML);
+    w.setControls(controls);
+    w.render();
+}
+
+function createswitchMACtable(id) {
+    var host = network.getElement(id);
+    /*var div = document.createElement("div");
+    var l = window.innerWidth / 2 - 200;
+    var t = window.innerHeight / 2 - 200;*/
+
+    var headers = [_("port"), _("MACaddress")];
+    var addressingTable=host.getConnectable().getswitchMAC();
+
+    var innerHTML='<table style="font-size:0.8em;">';
+    for (var mac in addressingTable) {
+        var ifpos=addressingTable[mac];
+        innerHTML+='<tr><th>'+'Interface'+ifpos.toString()+'</th><th>'+mac.toString()+'</th></tr>';
+        //data.push(datatmp);
+    }
+    innerHTML+="</table>"
+    //var uimactable = new UITable(headers, data, 'mactable');
+
+    /*div.setAttribute('style', 'position:absolute;top:' + t + 'px;left:' + l + 'px;z-index:110;background-color:white;width:700px;height:400px;border-radius:10px;border:1px solid;padding:10px;text-align:center;');
+    div.setAttribute('id', 'divgwconfig');
+    div.innerHTML = host.getConnectable().getGatewayManager().getController();*/
+
+    //var controls = '<input type="button" id="upload" value="' + _("Save") + '" onclick="saveGWConfig(' + id + ',\'' + uigwtable.getId() + '\');" />\
+    //<input type="button" id="cancel" value="' + _("Cancel") + '" onclick="cancelGWConfig(\'' + uigwtable.getId() + '\');" />';
+    var controls = '<p><input type="button" id="cancel" value="'+_("Exit")+'" onclick="closeMACtable();" /></p>';
+
+    var w = new UIWindow('divmacshow', _('MAC table show'), 400, 400, false, 1.0);
+    w.setContent(innerHTML);
+    w.setControls(controls);
+    w.render();
+}
 
 function editNameGroup(id)
 {
@@ -349,7 +489,6 @@ var Host = function(type, ports)
         {
             group = data.group;
         }
-
         redoMenu();
     };
     
@@ -415,6 +554,7 @@ var Host = function(type, ports)
         menu.addEntry("img/64/delete.png", "Delete element", "deleteSelected();");
         menu.addEntry("img/64/edit.png", "Edit Name / Group", "editNameGroup(" + _self.id + ");");            
         menu.addEntry("img/64/link.png", "Create Link", "createLinkAction();");
+
         if (connectable.getIpMode() !== IPMODE_NOIP) 
         {
             menu.addEntry("img/64/inspect.png", "Network diagnostics", "networkDiagnostics(" + _self.id + ");");
@@ -429,9 +569,19 @@ var Host = function(type, ports)
             }
         }
 
-        if (type === "router")
+        if (type == "router")
         {
             menu.addEntry("img/64/edit.png", "Edit NAT table", "editNATTable(" + _self.id + ");");
+
+        }
+
+        if (type != "switch")
+        {
+            menu.addEntry("img/64/edit.png", "port MAC address", "showMACtable(" + _self.id + ");");
+            menu.addEntry("img/64/inspectARP.png", "show ARP table", "showARPTable(" + _self.id + ");");
+         }else
+        {
+            menu.addEntry("img/64/inspectMAC.png", "switch MAC table", "showswitchMACtable(" + _self.id + ");");
         }
     }
     
@@ -553,19 +703,17 @@ var Host = function(type, ports)
                 }
             }
         }
-        else if (connectable.getIpMode() === IPMODE_SHARED)
-        {
+        else if (connectable.getIpMode() === IPMODE_SHARED) {
             result += "\n";
             result += _("IP: ");
             result += ": ";
-            result += (connectable.getIPInfo(0).getIPv4() === null)?"-":connectable.getIPInfo(0).getIPv4();
-            if (NetworkSimulator.verbose == true)
-            {
+            result += (connectable.getIPInfo(0).getIPv4() === null) ? "-" : connectable.getIPInfo(0).getIPv4();
+            if (NetworkSimulator.verbose == true) {
                 result += "\n";
-                result += this.getVerboseStr(connectable,0);
+                result += this.getVerboseStr(connectable, 0);
             }
         }
-        
+
         return result;
     };
     
