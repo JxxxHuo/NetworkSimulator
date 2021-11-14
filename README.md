@@ -1,3 +1,12 @@
+
+Add new inspect options "MAC table" and "ARP table". 
+
+This lets students see the changes in switch MAC table and ARP table after packets are sent.
+
+Jxxx Huo
+
+----------------------------------------------------------------
+
 # NetworkSimulator
 Educational Network Simulator Project
 
